@@ -1,0 +1,18 @@
+
+# Following seafile-server install guide here: https://manual.seafile.com/deploy/using_sqlite.html
+
+- import_tasks: install_seafile.yml
+- import_tasks: setup_seafile.yml
+- import_tasks: setup_service.yml
+
+- name: start seafile
+  service:
+    name: seafile
+    state: started
+    enabled: yes
+
+- name: start seahub
+  service:
+    name: seahub
+    state: started
+    enabled: yes

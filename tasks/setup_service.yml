@@ -1,0 +1,23 @@
+
+- name: setup systemd
+  block:
+    - name: deploy systemd unit files
+      template:
+        src: systemd/{{ item }}
+        dest: /lib/systemd/system/{{ item }}
+        owner: root
+        group: root
+        mode: 0644
+      with_items:
+        - seafile.service
+        - seahub.service
+      register: systemd_service
+
+    - name: reload systemd
+      command: systemctl daemon-reload
+      become: yes
+      when: systemd_service.changed
+  when: ansible_service_mgr == "systemd"
+
+# - name: setup init.d
+#   when: false

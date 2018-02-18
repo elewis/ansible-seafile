@@ -1,0 +1,48 @@
+
+- name: create group
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ seafile_group }}"
+
+- name: create user
+  user:
+    name: "{{ item }}"
+    groups: "{{ seafile_group }}"
+    state: present
+  with_items:
+  - "{{ seafile_user }}"
+
+- name: install packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python2.7
+    - libpython2.7
+    - python-setuptools
+    - python-imaging
+    - python-ldap
+    - python-urllib3
+    - sqlite3
+
+- name: create home directory
+  file:
+    name: "{{ item }}"
+    state: directory
+    owner: "{{ seafile_user }}"
+    group: "{{ seafile_group }}"
+    mode: 0755
+  with_items:
+    - "{{ seafile_home }}"
+
+- name: "download and extract seafile-server version {{ seafile_server_version }} ({{ seafile_server_arch }})"
+  unarchive:
+    src: "https://download.seadrive.org/seafile-server_{{ seafile_server_version }}_{{ seafile_server_arch }}.tar.gz"
+    dest: "{{ seafile_home }}"
+    remote_src: yes
+    owner: "{{ seafile_user }}"
+    group: "{{ seafile_group }}"
+    mode: 0755
+    creates: "{{ seafile_home }}/seafile-server-{{ seafile_server_version }}"

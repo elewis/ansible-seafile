@@ -1,0 +1,17 @@
+
+- name: run setup-seafile.sh
+  command: "./setup-seafile.sh auto {{ ansible_hostname }} {{ inventory_hostname }}"
+  args:
+    chdir: "{{ seafile_home }}/seafile-server-{{ seafile_server_version }}"
+    creates: "{{ seafile_home }}/seafile-server-latest"
+  become_user: "{{ seafile_user }}"
+  become: yes
+
+- name: deploy seafile conf
+  template:
+    src: seafile/conf/seafile.conf
+    dest: "{{ seafile_home }}/conf/seafile.conf"
+    owner: "{{ seafile_user }}"
+    group: "{{ seafile_group }}"
+    mode: 0644
+  notify: restart seafile

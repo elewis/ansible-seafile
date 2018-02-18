@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Seafile hub (web portal)
+After=network.target seafile.service
+
+[Service]
+Type=oneshot
+ExecStart={{ seafile_home }}/seafile-server-latest/seahub.sh start-fastcgi
+ExecStop={{ seafile_home }}/seafile-server-latest/seahub.sh stop
+RemainAfterExit=yes
+User={{ seafile_user }}
+Group={{ seafile_group }}
+
+[Install]
+WantedBy=multi-user.target

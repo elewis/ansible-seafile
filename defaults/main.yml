@@ -1,0 +1,10 @@
+seafile_user: seafile
+seafile_group: seafile
+seafile_home: /opt/seafile
+seafile_server_version: "6.2.3"
+seafile_server_arch: "{{ ansible_architecture | replace('_', '-') }}"
+seafile_worker_threads: 10
+
+# Assume that this is being run behind a reverse proxy
+seafile_fileserver_host: 127.0.0.1
+seafile_fileserver_port: 8082
